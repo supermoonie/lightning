@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.github.supermoonie.component.NumberField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.github.supermoonie.controller.notify.NotifySettingController"
+            prefHeight="200.0" prefWidth="400.0">
+    <GridPane alignment="CENTER" hgap="20" vgap="10">
+        <padding>
+            <Insets top="25" right="25" bottom="25" left="25"/>
+        </padding>
+
+        <Text fx:id="title" text="Notification Setting" style="-fx-font-size: 18; -fx-font-weight: bold;"
+              GridPane.fillHeight="50"
+              GridPane.halignment="CENTER" GridPane.valignment="CENTER"
+              GridPane.columnIndex="0" GridPane.rowIndex="0"
+              GridPane.rowSpan="2"
+              GridPane.columnSpan="4"/>
+
+        <Label text="Title:"
+               GridPane.halignment="RIGHT" GridPane.valignment="CENTER"
+               GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <TextField fx:id="titleField"
+                   GridPane.halignment="CENTER" GridPane.valignment="CENTER"
+                   GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.columnSpan="3"/>
+
+        <Label text="Content:"
+               GridPane.halignment="RIGHT" GridPane.valignment="CENTER"
+               GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <TextField fx:id="contentField"
+                   GridPane.halignment="CENTER" GridPane.valignment="CENTER"
+                   GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.columnSpan="3"/>
+
+        <Label text="Period:"
+               GridPane.halignment="RIGHT" GridPane.valignment="CENTER"
+               GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+        <NumberField fx:id="periodField"
+                     GridPane.halignment="CENTER" GridPane.valignment="CENTER"
+                     GridPane.columnIndex="1" GridPane.rowIndex="4" text="1" max="60" min="1"/>
+        <ComboBox fx:id="timeUnitComboBox"
+                  GridPane.halignment="CENTER" GridPane.valignment="CENTER"
+                  GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+        <CheckBox fx:id="isLoopBox" text="Loop"
+                  GridPane.halignment="CENTER" GridPane.valignment="CENTER"
+                  GridPane.columnIndex="3" GridPane.rowIndex="4" selected="true"/>
+
+        <Group GridPane.columnIndex="0" GridPane.rowIndex="5"
+               GridPane.rowSpan="2"
+               GridPane.columnSpan="4"/>
+
+        <HBox GridPane.columnIndex="0" GridPane.rowIndex="7"
+              GridPane.columnSpan="3"/>
+        <HBox GridPane.columnIndex="3" GridPane.rowIndex="7" alignment="BASELINE_CENTER" spacing="10">
+            <Button fx:id="cancelButton" text="Cancel" onMouseClicked="#onCancelButtonClicked"/>
+            <Button fx:id="okButton" text=" Ok " onMouseClicked="#onOkButtonClicked"/>
+        </HBox>
+
+    </GridPane>
+
+</AnchorPane>

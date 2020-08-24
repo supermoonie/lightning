@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.github.supermoonie</groupId>
+    <artifactId>lightning</artifactId>
+    <version>0.0.1</version>
+
+    <name>lightning</name>
+    <!-- FIXME change it to the project's website -->
+    <url>http://www.example.com</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <organizationName>supermoonie</organizationName>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>13</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-swing</artifactId>
+            <version>13</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>13</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.oshi</groupId>
+            <artifactId>oshi-core</artifactId>
+            <version>5.2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+            <version>3.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.4</version>
+                <configuration>
+                    <mainClass>com.github.supermoonie.AppLauncher</mainClass>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>io.github.fvarrui</groupId>
+                <artifactId>javapackager</artifactId>
+                <version>1.1.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>package</goal>
+                        </goals>
+                        <configuration>
+                            <!-- mandatory -->
+                            <mainClass>com.github.supermoonie.AppLauncher</mainClass>
+                            <!-- optional -->
+                            <assetsDir>${basedir}/assets</assetsDir>
+                            <copyDependencies>true</copyDependencies>
+                            <bundleJre>true</bundleJre>
+                            <generateInstaller>true</generateInstaller>
+                            <administratorRequired>false</administratorRequired>
+                            <platform>auto</platform>
+                            <vmArgs>
+
+                            </vmArgs>
+                            <additionalResources>
+                                <additionalResource>${basedir}/assets</additionalResource>
+                            </additionalResources>
+                            <macConfig>
+<!--                                <icnsFile>/assets/mac/lightning.icns</icnsFile>-->
+                                <generateDmg>true</generateDmg>
+                                <generatePkg>true</generatePkg>
+                                <iconSize>128</iconSize>
+                                <volumeIcon>${basedir}/assets/mac/lightning.icns</volumeIcon>
+                                <volumeName>${name}</volumeName>
+                            </macConfig>
+                            <winConfig>
+<!--                                <icoFile>${basedir}/assets/win/lightning.ico</icoFile>-->
+                                <generateSetup>true</generateSetup>
+                                <generateMsi>true</generateMsi>
+                                <!-- exe creation properties -->
+                                <headerType>gui</headerType>
+<!--                                <wrapJar>true</wrapJar>-->
+                                <companyName>${organizationName}</companyName>
+                                <fileVersion>1.0.0.0</fileVersion>
+                                <txtFileVersion>${version}</txtFileVersion>
+                                <productVersion>1.0.0.0</productVersion>
+                                <txtProductVersion>${version}</txtProductVersion>
+                                <fileDescription>${description}</fileDescription>
+                                <copyright>${organizationName}</copyright>
+                                <productName>${name}</productName>
+                                <internalName>${name}</internalName>
+                                <originalFilename>${name}.exe</originalFilename>
+                            </winConfig>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

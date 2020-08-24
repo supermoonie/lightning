@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.github.supermoonie.controller.qr.ResultController"
+            prefHeight="400.0" prefWidth="600.0">
+    <VBox>
+        <TableView fx:id="qrTableView"
+                   prefWidth="800"
+                   prefHeight="600"
+                   onKeyPressed="#onKeyPressed">
+            <placeholder>
+                <Label text="No Data!"/>
+            </placeholder>
+            <columns>
+                <TableColumn fx:id="resultColumn" text="Result">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="result"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="scanDateColumn" text="Date">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="scanDate"/>
+                    </cellValueFactory>
+                </TableColumn>
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+        </TableView>
+        <HBox alignment="BASELINE_RIGHT" style="-fx-padding: 5 10 10 10;">
+            <Button fx:id="clearButton" text="Clear" onMouseClicked="#onClearButtonClicked">
+
+            </Button>
+        </HBox>
+    </VBox>
+</AnchorPane>
