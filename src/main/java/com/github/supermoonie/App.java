@@ -155,8 +155,7 @@ public class App extends Application {
     }
 
     private void initTray(SystemTray tray) throws IOException, AWTException {
-        URL iconUrl = App.class.getClassLoader().getResource("lightning.png");
-        assert null != iconUrl;
+        URL iconUrl = getClass().getResource("/lightning.png");
         BufferedImage icon = ImageIO.read(iconUrl);
         TrayIcon trayIcon = new TrayIcon(icon);
         trayIcon.setToolTip("Lightning");
@@ -182,26 +181,12 @@ public class App extends Application {
 
     private Menu initQrMenu() {
         Menu qrMenu = new Menu("QR ->");
-        MenuItem scanQrThen = new MenuItem("扫描并核销");
-        scanQrThen.addActionListener(event -> {
-            Platform.runLater(() -> {
-                try {
-                    Result result = QrService.scanScreen();
-                    String text = result.getText();
-
-                } catch (NotFoundException e) {
-                    AlertUtil.warning("未扫描到二维码！");
-                }
-            });
-        });
-
         MenuItem scanQrItem = new MenuItem("Scan");
         scanQrItem.addActionListener(event -> Platform.runLater(this::scanQr));
         MenuItem generateQrItem = new MenuItem("Generate ...");
         generateQrItem.addActionListener(event -> Platform.runLater(this::showQrGeneratePane));
         MenuItem qrResultItem = new MenuItem("Result ...");
         qrResultItem.addActionListener(event -> Platform.runLater(this::showQrTableView));
-        qrMenu.add(scanQrThen);
         qrMenu.add(scanQrItem);
         qrMenu.add(generateQrItem);
         qrMenu.add(qrResultItem);

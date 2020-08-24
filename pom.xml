@@ -87,7 +87,7 @@
 
                             </vmArgs>
                             <additionalResources>
-                                <additionalResource>${basedir}/assets</additionalResource>
+<!--                                <additionalResource>${basedir}/assets</additionalResource>-->
                             </additionalResources>
                             <macConfig>
 <!--                                <icnsFile>/assets/mac/lightning.icns</icnsFile>-->
@@ -97,24 +97,24 @@
                                 <volumeIcon>${basedir}/assets/mac/lightning.icns</volumeIcon>
                                 <volumeName>${name}</volumeName>
                             </macConfig>
-                            <winConfig>
-<!--                                <icoFile>${basedir}/assets/win/lightning.ico</icoFile>-->
-                                <generateSetup>true</generateSetup>
-                                <generateMsi>true</generateMsi>
-                                <!-- exe creation properties -->
-                                <headerType>gui</headerType>
-<!--                                <wrapJar>true</wrapJar>-->
-                                <companyName>${organizationName}</companyName>
-                                <fileVersion>1.0.0.0</fileVersion>
-                                <txtFileVersion>${version}</txtFileVersion>
-                                <productVersion>1.0.0.0</productVersion>
-                                <txtProductVersion>${version}</txtProductVersion>
-                                <fileDescription>${description}</fileDescription>
-                                <copyright>${organizationName}</copyright>
-                                <productName>${name}</productName>
-                                <internalName>${name}</internalName>
-                                <originalFilename>${name}.exe</originalFilename>
-                            </winConfig>
+<!--                            <winConfig>-->
+<!--&lt;!&ndash;                                <icoFile>${basedir}/assets/win/lightning.ico</icoFile>&ndash;&gt;-->
+<!--                                <generateSetup>true</generateSetup>-->
+<!--                                <generateMsi>true</generateMsi>-->
+<!--                                &lt;!&ndash; exe creation properties &ndash;&gt;-->
+<!--                                <headerType>gui</headerType>-->
+<!--&lt;!&ndash;                                <wrapJar>true</wrapJar>&ndash;&gt;-->
+<!--                                <companyName>${organizationName}</companyName>-->
+<!--                                <fileVersion>1.0.0.0</fileVersion>-->
+<!--                                <txtFileVersion>${version}</txtFileVersion>-->
+<!--                                <productVersion>1.0.0.0</productVersion>-->
+<!--                                <txtProductVersion>${version}</txtProductVersion>-->
+<!--                                <fileDescription>${description}</fileDescription>-->
+<!--                                <copyright>${organizationName}</copyright>-->
+<!--                                <productName>${name}</productName>-->
+<!--                                <internalName>${name}</internalName>-->
+<!--                                <originalFilename>${name}.exe</originalFilename>-->
+<!--                            </winConfig>-->
                         </configuration>
                     </execution>
                 </executions>

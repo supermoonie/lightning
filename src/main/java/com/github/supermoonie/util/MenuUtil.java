@@ -3,13 +3,15 @@ package com.github.supermoonie.util;
 
 import java.awt.*;
 
+import static javafx.scene.text.FontWeight.BOLD;
+
 /**
  * @author supermoonie
  * @since 2020/8/23
  */
 public class MenuUtil {
 
-    private static final String ACTIVE_FLAG = "    ✔️";
+    private static final String ACTIVE_FLAG = "";
 
     private MenuUtil() {
 
@@ -20,9 +22,9 @@ public class MenuUtil {
         for (int i = 0; i < size; i ++) {
             MenuItem item = menu.getItem(i);
             if (item.getLabel().equals(label)) {
-                item.setLabel(item.getLabel().replace(ACTIVE_FLAG, "") + ACTIVE_FLAG);
+                item.setFont(new Font(null, Font.BOLD, 14));
             } else {
-                item.setLabel(item.getLabel().replace(ACTIVE_FLAG, ""));
+                item.setFont(new Font(null, Font.PLAIN, 14));
             }
         }
     }
@@ -32,9 +34,9 @@ public class MenuUtil {
         for (int i = 0; i < size; i ++) {
             MenuItem item = menu.getItem(i);
             if (i == index) {
-                item.setLabel(item.getLabel().replace(ACTIVE_FLAG, "") + ACTIVE_FLAG);
+                item.setFont(new Font(null, Font.BOLD, 14));
             } else {
-                item.setLabel(item.getLabel().replace(ACTIVE_FLAG, ""));
+                item.setFont(new Font(null, Font.PLAIN, 14));
             }
         }
     }

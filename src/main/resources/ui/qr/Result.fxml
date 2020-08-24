@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.github.supermoonie.controller.qr.ResultController"
@@ -33,7 +34,8 @@
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
             </columnResizePolicy>
         </TableView>
-        <HBox alignment="BASELINE_RIGHT" style="-fx-padding: 5 10 10 10;">
+        <HBox alignment="CENTER">
+            <padding><Insets top="5"/></padding>
             <Button fx:id="clearButton" text="Clear" onMouseClicked="#onClearButtonClicked">
 
             </Button>

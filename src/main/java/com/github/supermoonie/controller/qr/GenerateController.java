@@ -35,8 +35,8 @@ public class GenerateController extends GenerateView {
         Stage stage = App.STAGE_MAP.get(StageKey.QR_GENERATE);
         splitPane.prefWidthProperty().bind(stage.widthProperty());
         splitPane.prefHeightProperty().bind(stage.heightProperty());
-        qrContentInput.prefHeightProperty().bind(stage.heightProperty().subtract(60));
-        imageViewContainer.prefHeightProperty().bind(stage.heightProperty().subtract(62));
+        qrContentInput.prefHeightProperty().bind(stage.heightProperty().subtract(70));
+        imageViewContainer.prefHeightProperty().bind(stage.heightProperty().subtract(72));
     }
 
     @FXML

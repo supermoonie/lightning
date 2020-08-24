@@ -29,7 +29,7 @@ public class ResultController extends ResultView {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Stage stage = App.STAGE_MAP.get(StageKey.QR_RESULT);
         qrTableView.prefWidthProperty().bind(stage.widthProperty());
-        qrTableView.prefHeightProperty().bind(stage.heightProperty().subtract(60));
+        qrTableView.prefHeightProperty().bind(stage.heightProperty().subtract(70));
     }
 
     @FXML
