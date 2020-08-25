@@ -9,6 +9,7 @@ import com.github.supermoonie.util.AlertUtil;
 import com.github.supermoonie.util.MenuUtil;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
+import com.sun.javafx.PlatformUtil;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -155,7 +156,12 @@ public class App extends Application {
     }
 
     private void initTray(SystemTray tray) throws IOException, AWTException {
-        URL iconUrl = getClass().getResource("/lightning.png");
+        URL iconUrl;
+        if (PlatformUtil.isWindows()) {
+            iconUrl = getClass().getResource("/lightning-win.png");
+        } else {
+            iconUrl = getClass().getResource("/lightning-mac.png");
+        }
         BufferedImage icon = ImageIO.read(iconUrl);
         TrayIcon trayIcon = new TrayIcon(icon);
         trayIcon.setToolTip("Lightning");
@@ -293,7 +299,12 @@ public class App extends Application {
     }
 
     private void setCommonIcon(Stage stage) {
-        URL iconUrl = getClass().getResource("/lightning.png");
+        URL iconUrl;
+        if (PlatformUtil.isWindows()) {
+            iconUrl = getClass().getResource("/lightning-win.png");
+        } else {
+            iconUrl = getClass().getResource("/lightning-mac.png");
+        }
         stage.getIcons().add(new Image(iconUrl.toString()));
         stage.setTitle("Lightning");
     }

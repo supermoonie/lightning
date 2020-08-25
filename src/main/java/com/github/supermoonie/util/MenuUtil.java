@@ -1,9 +1,9 @@
 package com.github.supermoonie.util;
 
 
-import java.awt.*;
+import com.sun.javafx.PlatformUtil;
 
-import static javafx.scene.text.FontWeight.BOLD;
+import java.awt.*;
 
 /**
  * @author supermoonie
@@ -11,32 +11,28 @@ import static javafx.scene.text.FontWeight.BOLD;
  */
 public class MenuUtil {
 
-    private static final String ACTIVE_FLAG = "";
+    private static final String ACTIVE_FLAG = "   ✔️";
 
     private MenuUtil() {
 
     }
 
-    public static void activeItem(Menu menu, String label) {
-        int size = menu.getItemCount();
-        for (int i = 0; i < size; i ++) {
-            MenuItem item = menu.getItem(i);
-            if (item.getLabel().equals(label)) {
-                item.setFont(new Font(null, Font.BOLD, 14));
-            } else {
-                item.setFont(new Font(null, Font.PLAIN, 14));
-            }
-        }
-    }
-
     public static void activeItem(Menu menu, int index) {
         int size = menu.getItemCount();
-        for (int i = 0; i < size; i ++) {
+        for (int i = 0; i < size; i++) {
             MenuItem item = menu.getItem(i);
             if (i == index) {
-                item.setFont(new Font(null, Font.BOLD, 14));
+                if (PlatformUtil.isWindows()) {
+                    item.setFont(new Font(null, Font.BOLD, 14));
+                } else {
+                    item.setLabel(item.getLabel().replace(ACTIVE_FLAG, "") + ACTIVE_FLAG);
+                }
             } else {
-                item.setFont(new Font(null, Font.PLAIN, 14));
+                if (PlatformUtil.isWindows()) {
+                    item.setFont(new Font(null, Font.PLAIN, 14));
+                } else {
+                    item.setLabel(item.getLabel().replace(ACTIVE_FLAG, ""));
+                }
             }
         }
     }

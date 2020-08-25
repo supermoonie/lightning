@@ -6,6 +6,7 @@ import com.github.supermoonie.service.QrService;
 import com.github.supermoonie.util.AlertUtil;
 import com.github.supermoonie.view.qr.GenerateView;
 import com.google.zxing.WriterException;
+import com.sun.javafx.PlatformUtil;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
@@ -35,8 +36,13 @@ public class GenerateController extends GenerateView {
         Stage stage = App.STAGE_MAP.get(StageKey.QR_GENERATE);
         splitPane.prefWidthProperty().bind(stage.widthProperty());
         splitPane.prefHeightProperty().bind(stage.heightProperty());
-        qrContentInput.prefHeightProperty().bind(stage.heightProperty().subtract(70));
-        imageViewContainer.prefHeightProperty().bind(stage.heightProperty().subtract(72));
+        if (PlatformUtil.isWindows()) {
+            qrContentInput.prefHeightProperty().bind(stage.heightProperty().subtract(72));
+            imageViewContainer.prefHeightProperty().bind(stage.heightProperty().subtract(75));
+        } else {
+            qrContentInput.prefHeightProperty().bind(stage.heightProperty().subtract(60));
+            imageViewContainer.prefHeightProperty().bind(stage.heightProperty().subtract(62));
+        }
     }
 
     @FXML

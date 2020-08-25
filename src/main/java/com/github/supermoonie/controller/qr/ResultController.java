@@ -4,6 +4,7 @@ import com.github.supermoonie.App;
 import com.github.supermoonie.constant.StageKey;
 import com.github.supermoonie.util.ClipboardUtil;
 import com.github.supermoonie.view.qr.ResultView;
+import com.sun.javafx.PlatformUtil;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -29,7 +30,11 @@ public class ResultController extends ResultView {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Stage stage = App.STAGE_MAP.get(StageKey.QR_RESULT);
         qrTableView.prefWidthProperty().bind(stage.widthProperty());
-        qrTableView.prefHeightProperty().bind(stage.heightProperty().subtract(70));
+        if (PlatformUtil.isWindows()) {
+            qrTableView.prefHeightProperty().bind(stage.heightProperty().subtract(70));
+        } else {
+            qrTableView.prefHeightProperty().bind(stage.heightProperty().subtract(60));
+        }
     }
 
     @FXML

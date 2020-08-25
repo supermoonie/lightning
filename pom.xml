@@ -36,9 +36,29 @@
             <version>13</version>
         </dependency>
         <dependency>
+            <groupId>org.eclipse.jgit</groupId>
+            <artifactId>org.eclipse.jgit</artifactId>
+            <version>4.8.0.201706111038-r</version>
+        </dependency>
+        <dependency>
             <groupId>com.github.oshi</groupId>
             <artifactId>oshi-core</artifactId>
             <version>5.2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacv-platform</artifactId>
+            <version>1.5.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>qt-platform</artifactId>
+            <version>5.14.2-1.5.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>tesseract-platform</artifactId>
+            <version>4.1.1-1.5.3</version>
         </dependency>
         <dependency>
             <groupId>com.google.zxing</groupId>
@@ -83,38 +103,13 @@
                             <generateInstaller>true</generateInstaller>
                             <administratorRequired>false</administratorRequired>
                             <platform>auto</platform>
-                            <vmArgs>
-
-                            </vmArgs>
-                            <additionalResources>
-<!--                                <additionalResource>${basedir}/assets</additionalResource>-->
-                            </additionalResources>
                             <macConfig>
-<!--                                <icnsFile>/assets/mac/lightning.icns</icnsFile>-->
                                 <generateDmg>true</generateDmg>
                                 <generatePkg>true</generatePkg>
                                 <iconSize>128</iconSize>
                                 <volumeIcon>${basedir}/assets/mac/lightning.icns</volumeIcon>
                                 <volumeName>${name}</volumeName>
                             </macConfig>
-<!--                            <winConfig>-->
-<!--&lt;!&ndash;                                <icoFile>${basedir}/assets/win/lightning.ico</icoFile>&ndash;&gt;-->
-<!--                                <generateSetup>true</generateSetup>-->
-<!--                                <generateMsi>true</generateMsi>-->
-<!--                                &lt;!&ndash; exe creation properties &ndash;&gt;-->
-<!--                                <headerType>gui</headerType>-->
-<!--&lt;!&ndash;                                <wrapJar>true</wrapJar>&ndash;&gt;-->
-<!--                                <companyName>${organizationName}</companyName>-->
-<!--                                <fileVersion>1.0.0.0</fileVersion>-->
-<!--                                <txtFileVersion>${version}</txtFileVersion>-->
-<!--                                <productVersion>1.0.0.0</productVersion>-->
-<!--                                <txtProductVersion>${version}</txtProductVersion>-->
-<!--                                <fileDescription>${description}</fileDescription>-->
-<!--                                <copyright>${organizationName}</copyright>-->
-<!--                                <productName>${name}</productName>-->
-<!--                                <internalName>${name}</internalName>-->
-<!--                                <originalFilename>${name}.exe</originalFilename>-->
-<!--                            </winConfig>-->
                         </configuration>
                     </execution>
                 </executions>
