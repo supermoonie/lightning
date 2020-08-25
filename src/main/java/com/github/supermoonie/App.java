@@ -69,7 +69,10 @@ public class App extends Application {
     private void showQrGeneratePane() {
         Stage stage = STAGE_MAP.computeIfAbsent(StageKey.QR_GENERATE, stageKey -> {
             Stage s = new Stage();
-            s.setOnHidden(windowEvent -> STAGE_MAP.remove(StageKey.QR_GENERATE));
+            s.setMinWidth(800);
+            s.setMinHeight(600);
+            s.setResizable(true);
+            s.setOnHiding(windowEvent -> STAGE_MAP.remove(StageKey.QR_GENERATE));
             return s;
         });
         try {
@@ -83,9 +86,30 @@ public class App extends Application {
             AlertUtil.error(e);
             return;
         }
-        stage.setMinWidth(800);
-        stage.setMinHeight(600);
-        stage.setResizable(true);
+        stage.show();
+        stage.toFront();
+    }
+
+    private void showGifGenerateView() {
+        Stage stage = STAGE_MAP.computeIfAbsent(StageKey.GIF_GENERATE, stageKey -> {
+            Stage s = new Stage();
+            setCommonIcon(s);
+            s.setMinWidth(600);
+            s.setMinHeight(820);
+            s.setResizable(true);
+            s.setOnHiding(windowEvent -> STAGE_MAP.remove(StageKey.GIF_GENERATE));
+            return s;
+        });
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/ui/gif/GifGenerate.fxml"));
+            Parent parent = fxmlLoader.load();
+            stage.setScene(new Scene(parent));
+            fxmlLoader.getController();
+        } catch (IOException e) {
+            e.printStackTrace();
+            AlertUtil.error(e);
+            return;
+        }
         stage.show();
         stage.toFront();
     }
@@ -178,11 +202,21 @@ public class App extends Application {
         popupMenu.addSeparator();
         popupMenu.add(initRestMenu());
         popupMenu.addSeparator();
+        popupMenu.add(initGifMenu());
+        popupMenu.addSeparator();
         popupMenu.add(quitItem);
 
         trayIcon.setPopupMenu(popupMenu);
 
         tray.add(trayIcon);
+    }
+
+    private Menu initGifMenu() {
+        Menu gifMenu = new Menu("Gif ->");
+        MenuItem generate = new MenuItem("Generate ...");
+        generate.addActionListener(event -> Platform.runLater(this::showGifGenerateView));
+        gifMenu.add(generate);
+        return gifMenu;
     }
 
     private Menu initQrMenu() {

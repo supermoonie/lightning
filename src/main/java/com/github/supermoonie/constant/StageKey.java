@@ -9,5 +9,5 @@ public enum StageKey {
     /**
      * primary
      */
-    PRIMARY, QR_GENERATE, QR_RESULT, NOTIFY_SETTING
+    PRIMARY, QR_GENERATE, QR_RESULT, NOTIFY_SETTING, GIF_GENERATE
 }

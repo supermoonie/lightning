@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import com.github.supermoonie.component.NumberField?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.github.supermoonie.controller.gif.GifGenerateController"
+            prefHeight="820.0" minWidth="800.0">
+    <fx:define>
+        <Image fx:id="addButtonImage" url="/image/plus.png" />
+    </fx:define>
+    <SplitPane fx:id="splitPane">
+        <VBox fx:id="leftBox" minWidth="450" prefHeight="820">
+            <ListView fx:id="imageViewList" minWidth="450">
+
+            </ListView>
+            <Button fx:id="addButton" minWidth="450"
+                    style="-fx-cursor: hand;"
+                    text="Add"
+                    onAction="#addButtonClicked">
+            </Button>
+        </VBox>
+
+        <VBox alignment="CENTER">
+            <HBox alignment="CENTER" prefHeight="400">
+                <ImageView fx:id="gifView" />
+            </HBox>
+            <HBox alignment="CENTER" spacing="10">
+                <Label text="Interval:"/>
+                <NumberField fx:id="intervalField" text="1000" prefWidth="60" max="10000" min="1" />
+                <CheckBox fx:id="isLoopBox" selected="true"/>
+                <Label text="Loop"/>
+            </HBox>
+            <HBox alignment="CENTER">
+                <Button fx:id="generateButton" text="Generate" onAction="#generateButtonClicked"/>
+            </HBox>
+        </VBox>
+    </SplitPane>
+
+</AnchorPane>
