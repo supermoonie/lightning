@@ -18,10 +18,12 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.apache.commons.io.FileUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -56,6 +58,11 @@ public class App extends Application {
         Platform.setImplicitExit(false);
         boolean addedAppToTray = addAppToTray();
         if (!addedAppToTray) {
+            Platform.exit();
+            return;
+        }
+        if (!initLighting()) {
+            AlertUtil.warning("Initial Failed");
             Platform.exit();
             return;
         }
@@ -320,16 +327,27 @@ public class App extends Application {
         }
     }
 
-    private <T> T load(String res) throws IOException {
-        return load(res, App.primaryStage);
-    }
+    public static final String USER_HOME = System.getProperty("user.home");
 
-    private <T> T load(String res, Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(res));
-        Parent root = fxmlLoader.load();
-        assert root != null;
-        stage.setScene(new Scene(root));
-        return fxmlLoader.getController();
+    public static final String LIGHTNING_HOME = USER_HOME + File.separator + ".lightning";
+
+    public static final String TEMP_DIR = LIGHTNING_HOME + File.separator + "temp";
+
+    private boolean initLighting() throws IOException {
+        File lightningHome = new File(LIGHTNING_HOME);
+        File tempDir = new File(TEMP_DIR);
+        if (!lightningHome.exists() && !lightningHome.mkdir()) {
+            AlertUtil.warning("Initial Failed!");
+            return false;
+        }
+        if (tempDir.exists()) {
+            FileUtils.deleteDirectory(tempDir);
+        }
+        if (!tempDir.mkdir()) {
+            AlertUtil.warning("Initial Failed!");
+            return false;
+        }
+        return true;
     }
 
     private void setCommonIcon(Stage stage) {

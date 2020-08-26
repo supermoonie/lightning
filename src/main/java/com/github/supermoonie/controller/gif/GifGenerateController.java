@@ -11,7 +11,6 @@ import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -61,7 +60,7 @@ public class GifGenerateController extends GifGenerateView {
         if (PlatformUtil.isWindows()) {
             imageViewList.prefHeightProperty().bind(stage.heightProperty().subtract(64));
         } else {
-            imageViewList.prefHeightProperty().bind(stage.heightProperty().subtract(20));
+            imageViewList.prefHeightProperty().bind(stage.heightProperty().subtract(64));
         }
     }
 
@@ -73,11 +72,10 @@ public class GifGenerateController extends GifGenerateView {
             return;
         }
         try {
-            File gif = File.createTempFile(UUID.randomUUID().toString() ,".gif");
-//            gif.deleteOnExit();
-
+            File gif = File.createTempFile(String.valueOf(System.currentTimeMillis()), ".gif", new File(App.TEMP_DIR));
             ImageOutputStream output = new FileImageOutputStream(gif);
-            GifSequenceWriter gifWriter = new GifSequenceWriter(output, BufferedImage.TYPE_3BYTE_BGR, Integer.parseInt(intervalField.getText()), true);
+            int interval = Integer.parseInt(intervalField.getText());
+            GifSequenceWriter gifWriter = new GifSequenceWriter(output, BufferedImage.TYPE_3BYTE_BGR, interval, true);
             try {
                 for (ImageView imageView : imageList) {
                     gifWriter.writeToSequence(SwingFXUtils.fromFXImage(imageView.getImage(), null));

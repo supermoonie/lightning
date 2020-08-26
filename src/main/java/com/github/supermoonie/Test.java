@@ -8,7 +8,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Box;
 import javafx.stage.Stage;
 
 import java.awt.image.BufferedImage;
