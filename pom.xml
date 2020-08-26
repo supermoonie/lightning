@@ -45,11 +45,11 @@
             <artifactId>org.eclipse.jgit</artifactId>
             <version>4.8.0.201706111038-r</version>
         </dependency>
-        <dependency>
-            <groupId>com.github.supermoonie</groupId>
-            <artifactId>winio4J</artifactId>
-            <version>1.01</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.github.supermoonie</groupId>-->
+<!--            <artifactId>winio4J</artifactId>-->
+<!--            <version>1.01</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.github.oshi</groupId>
             <artifactId>oshi-core</artifactId>

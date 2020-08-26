@@ -60,8 +60,17 @@ public class GifGenerateController extends GifGenerateView {
         if (PlatformUtil.isWindows()) {
             imageViewList.prefHeightProperty().bind(stage.heightProperty().subtract(64));
         } else {
-            imageViewList.prefHeightProperty().bind(stage.heightProperty().subtract(64));
+            imageViewList.prefHeightProperty().bind(stage.heightProperty().subtract(50));
         }
+        FileChooser.ExtensionFilter imageFilter
+                = new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.png");
+        fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(imageFilter);
+    }
+
+    @FXML
+    public void saveButtonClicked() {
+
     }
 
     @FXML
@@ -84,18 +93,7 @@ public class GifGenerateController extends GifGenerateView {
                 gifWriter.close();
                 output.close();
             }
-            System.out.println(gif.getAbsolutePath());
-            gifView.setFitWidth(120);
-            gifView.setPreserveRatio(true);
-            gifView.setSmooth(true);
-            gifView.setCache(true);
-            Platform.runLater(() -> {
-                try {
-                    gifView.setImage(new Image(new FileInputStream(gif.getAbsolutePath())));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-            });
+            gifView.setImage(new Image(new FileInputStream(gif.getAbsolutePath())));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -107,20 +105,23 @@ public class GifGenerateController extends GifGenerateView {
         if (null == image) {
             return;
         }
+        if (imageViewList.getItems().size() > 0) {
+            Image firstImage = imageViewList.getItems().get(0).getImage();
+            if (image.getWidth() != firstImage.getWidth() || image.getHeight() != firstImage.getHeight()) {
+                AlertUtil.warning("Please select the same size picture!");
+                return;
+            }
+        }
         ImageView imageView = new ImageView();
-        imageView.setFitWidth(imageViewList.getWidth());
-        imageView.fitWidthProperty().bind(imageViewList.widthProperty());
+        imageView.fitWidthProperty().bind(imageViewList.widthProperty().subtract(30));
         imageView.setFitHeight(400);
         imageView.setImage(image);
         imageViewList.getItems().add(imageView);
     }
 
     private Image selectImage() {
-        FileChooser.ExtensionFilter imageFilter
-                = new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.png");
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(imageFilter);
-        File file = fileChooser.showOpenDialog(App.primaryStage);
+        Stage stage = App.STAGE_MAP.get(StageKey.GIF_GENERATE);
+        File file = fileChooser.showOpenDialog(stage);
         if (null == file) {
             return null;
         }

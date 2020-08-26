@@ -10,6 +10,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 
 /**
  * @author supermoonie
@@ -43,4 +44,10 @@ public abstract class GifGenerateView implements Initializable {
 
     @FXML
     public Button generateButton;
+
+    @FXML
+    public Button saveButton;
+
+    @FXML
+    protected FileChooser fileChooser;
 }

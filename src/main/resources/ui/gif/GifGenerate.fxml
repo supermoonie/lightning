@@ -38,8 +38,9 @@
                 <CheckBox fx:id="isLoopBox" selected="true"/>
                 <Label text="Loop"/>
             </HBox>
-            <HBox alignment="CENTER">
+            <HBox alignment="CENTER" spacing="10">
                 <Button fx:id="generateButton" text="Generate" onAction="#generateButtonClicked"/>
+                <Button fx:id="saveButton" text="Save" onAction="#saveButtonClicked"/>
             </HBox>
         </VBox>
     </SplitPane>
