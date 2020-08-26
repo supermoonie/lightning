@@ -70,7 +70,8 @@ public class GenerateController extends GenerateView {
             FileChooser fileChooser = new FileChooser();
             Integer size = sizeCombobox.getValue();
             fileChooser.setInitialFileName(size + ".png");
-            File file = fileChooser.showSaveDialog(App.primaryStage);
+            Stage stage = App.STAGE_MAP.get(StageKey.QR_GENERATE);
+            File file = fileChooser.showSaveDialog(stage);
             if (null != file) {
                 try {
                     ImageIO.write(img, "png", file);

@@ -9,8 +9,11 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+
+import java.io.File;
 
 /**
  * @author supermoonie
@@ -23,6 +26,9 @@ public abstract class GifGenerateView implements Initializable {
 
     @FXML
     public VBox leftBox;
+
+    @FXML
+    public VBox rightBox;
 
     @FXML
     public ListView<ImageView> imageViewList;
@@ -49,5 +55,11 @@ public abstract class GifGenerateView implements Initializable {
     public Button saveButton;
 
     @FXML
+    public HBox gifViewContainer;
+
+    @FXML
     protected FileChooser fileChooser;
+
+    protected File gif;
+
 }

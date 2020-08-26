@@ -110,7 +110,9 @@ public class App extends Application {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/ui/gif/GifGenerate.fxml"));
             Parent parent = fxmlLoader.load();
-            stage.setScene(new Scene(parent));
+            Scene scene = new Scene(parent);
+            scene.getStylesheets().add("/style/gif/GifGenerate.css");
+            stage.setScene(scene);
             fxmlLoader.getController();
         } catch (IOException e) {
             e.printStackTrace();
