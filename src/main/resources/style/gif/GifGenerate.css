@@ -6,3 +6,6 @@
 .list-view .scroll-bar:horizontal {
     -fx-scale-x: 0;
 }
+.list-cell {
+    -fx-alignment: center;
+}

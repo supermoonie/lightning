@@ -1,15 +1,11 @@
 package com.github.supermoonie.view.gif;
 
-import com.github.supermoonie.component.NumberField;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SplitPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
@@ -28,10 +24,13 @@ public abstract class GifGenerateView implements Initializable {
     public VBox leftBox;
 
     @FXML
-    public VBox rightBox;
+    public BorderPane rightBox;
 
     @FXML
     public ListView<ImageView> imageViewList;
+
+    @FXML
+    public ListView<ImageView> gifImageViewList;
 
     @FXML
     public Image addButtonImage;
@@ -40,10 +39,7 @@ public abstract class GifGenerateView implements Initializable {
     public Button addButton;
 
     @FXML
-    public ImageView gifView;
-
-    @FXML
-    public NumberField intervalField;
+    public TextField intervalField;
 
     @FXML
     public CheckBox isLoopBox;
@@ -52,10 +48,13 @@ public abstract class GifGenerateView implements Initializable {
     public Button generateButton;
 
     @FXML
+    public Button saveAllButton;
+
+    @FXML
     public Button saveButton;
 
     @FXML
-    public HBox gifViewContainer;
+    public Button copyButton;
 
     @FXML
     protected FileChooser fileChooser;

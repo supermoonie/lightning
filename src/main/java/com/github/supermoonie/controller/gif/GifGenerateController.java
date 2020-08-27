@@ -6,25 +6,21 @@ import com.github.supermoonie.io.GifSequenceWriter;
 import com.github.supermoonie.util.AlertUtil;
 import com.github.supermoonie.view.gif.GifGenerateView;
 import com.sun.javafx.PlatformUtil;
-import javafx.beans.InvalidationListener;
-import javafx.beans.property.Property;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 
-import javax.imageio.ImageIO;
 import javax.imageio.stream.FileImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
 import java.awt.image.BufferedImage;
@@ -64,12 +60,12 @@ public class GifGenerateController extends GifGenerateView {
             }
             imageViewList.getSelectionModel().getSelectedItem().setImage(image);
         });
-        contextMenu.getItems().add(replaceItem);
-        contextMenu.getItems().add(deleteItem);
+        MenuItem clearItem = new MenuItem("Clear");
+        clearItem.setOnAction(event -> imageViewList.getItems().clear());
+        contextMenu.getItems().addAll(replaceItem, deleteItem, clearItem);
         imageViewList.setContextMenu(contextMenu);
         if (PlatformUtil.isWindows()) {
             imageViewList.prefHeightProperty().bind(stage.heightProperty().subtract(64));
-            gifViewContainer.prefHeightProperty().bind(stage.heightProperty().subtract(150));
         } else {
             imageViewList.prefHeightProperty().bind(stage.heightProperty().subtract(50));
         }
@@ -77,6 +73,7 @@ public class GifGenerateController extends GifGenerateView {
                 = new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.png");
         fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(imageFilter);
+        BorderPane.setAlignment(rightBox, Pos.CENTER);
     }
 
     @FXML
@@ -114,8 +111,8 @@ public class GifGenerateController extends GifGenerateView {
                 gifWriter.close();
                 output.close();
             }
-            gifView.setImage(new Image(new FileInputStream(gif.getAbsolutePath())));
-            gifView.setFitHeight(gifViewContainer.getHeight() - 2);
+            Image image = new Image(new FileInputStream(gif.getAbsolutePath()));
+            gifImageViewList.getItems().add(new ImageView(image));
         } catch (IOException e) {
             AlertUtil.error(e);
         }
@@ -128,8 +125,9 @@ public class GifGenerateController extends GifGenerateView {
             return;
         }
         ImageView imageView = new ImageView();
-        splitPane.setDividerPositions((image.getWidth() + 28)/splitPane.getWidth());
-        imageViewList.setMinWidth(image.getWidth() + 28);
+        double position = Math.min((image.getWidth() + 28) / splitPane.getWidth(), 0.5);
+        splitPane.setDividerPositions(position);
+        imageViewList.setMinWidth(position * splitPane.getWidth());
         imageView.setFitWidth(image.getWidth());
         imageView.setFitHeight(image.getHeight());
         imageView.setImage(image);
