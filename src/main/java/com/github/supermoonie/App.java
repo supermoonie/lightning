@@ -12,12 +12,23 @@ import com.google.zxing.Result;
 import com.sun.javafx.PlatformUtil;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.robot.Robot;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.apache.commons.io.FileUtils;
 
 import javax.imageio.ImageIO;
@@ -67,8 +78,11 @@ public class App extends Application {
             return;
         }
         App.primaryStage = primaryStage;
+        primaryStage.initStyle(StageStyle.UNDECORATED);
+//        primaryStage.setFullScreenExitHint("");
         STAGE_MAP.put(StageKey.PRIMARY, primaryStage);
         App.scene = new Scene(new VBox());
+        App.scene.setCursor(Cursor.CROSSHAIR);
         App.primaryStage.setScene(scene);
         setCommonIcon(App.primaryStage);
     }
@@ -230,12 +244,29 @@ public class App extends Application {
 
     private Menu initQrMenu() {
         Menu qrMenu = new Menu("QR ->");
+        MenuItem captureItem = new MenuItem("Capture");
+        captureItem.addActionListener(event -> Platform.runLater(() -> {
+            Robot robot = new Robot();
+            WritableImage image = robot.getScreenCapture(null, Screen.getPrimary().getBounds());
+            Rectangle2D bounds = Screen.getPrimary().getBounds();
+            primaryStage.setWidth(bounds.getWidth());
+            primaryStage.setHeight(bounds.getHeight());
+            scene.setRoot(new HBox(new ImageView(image)));
+            scene.setOnMousePressed(mouseEvent -> System.out.println("mouse pressed"));
+            scene.setOnMouseDragged(mouseEvent -> System.out.println("x: " + mouseEvent.getX() + ", y: " + mouseEvent.getY()));
+            scene.setOnMouseReleased(mouseEvent -> System.out.println("mouse released"));
+            primaryStage.setFullScreen(true);
+            primaryStage.show();
+            primaryStage.setAlwaysOnTop(true);
+            primaryStage.toFront();
+        }));
         MenuItem scanQrItem = new MenuItem("Scan");
         scanQrItem.addActionListener(event -> Platform.runLater(this::scanQr));
         MenuItem generateQrItem = new MenuItem("Generate ...");
         generateQrItem.addActionListener(event -> Platform.runLater(this::showQrGeneratePane));
         MenuItem qrResultItem = new MenuItem("Result ...");
         qrResultItem.addActionListener(event -> Platform.runLater(this::showQrTableView));
+        qrMenu.add(captureItem);
         qrMenu.add(scanQrItem);
         qrMenu.add(generateQrItem);
         qrMenu.add(qrResultItem);
