@@ -35,6 +35,12 @@ public class AlertUtil {
         toFront(alert);
     }
 
+    public static void info(String msg) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK);
+        alert.setHeaderText("");
+        AlertUtil.toFront(alert);
+    }
+
     public static Optional<ButtonType> toFront(Alert alert) {
         DialogPane root = alert.getDialogPane();
         Stage dialogStage = new Stage(StageStyle.UTILITY);

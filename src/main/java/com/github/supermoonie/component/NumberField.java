@@ -19,6 +19,11 @@ public class NumberField extends TextField {
                 setText("");
                 return;
             }
+            String zeroPattern = "^0*";
+            if (newValue.matches(zeroPattern)) {
+                setText(newValue);
+                return;
+            }
             try {
                 long value = Long.parseLong(newValue);
                 if (value >= min && value <= max) {

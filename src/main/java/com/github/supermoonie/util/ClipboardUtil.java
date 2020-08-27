@@ -3,9 +3,11 @@ package com.github.supermoonie.util;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
+import javafx.scene.image.Image;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 
+import java.io.File;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -18,6 +20,18 @@ public class ClipboardUtil {
 
     private ClipboardUtil() {
 
+    }
+
+    public static void copyImage(Image image) {
+        final ClipboardContent clipboardContent = new ClipboardContent();
+        clipboardContent.putImage(image);
+        Clipboard.getSystemClipboard().setContent(clipboardContent);
+    }
+
+    public static void copyFile(List<File> files) {
+        final ClipboardContent clipboardContent = new ClipboardContent();
+        clipboardContent.putFiles(files);
+        Clipboard.getSystemClipboard().setContent(clipboardContent);
     }
 
     public static void copySelectionToClipboard(final TableView<?> table, List<Integer> copyColumnIndexList) {

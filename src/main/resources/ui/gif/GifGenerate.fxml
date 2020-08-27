@@ -24,28 +24,26 @@
             </Button>
         </VBox>
 
-        <BorderPane fx:id="rightBox">
+        <BorderPane fx:id="rightBox" style="-fx-padding: 0 15 0 0">
             <center>
                 <ListView fx:id="gifImageViewList">
 
                 </ListView>
             </center>
             <bottom>
-                <VBox prefHeight="120" style="-fx-padding: 10;">
+                <VBox prefHeight="120" style="-fx-padding: 5;">
                     <HBox alignment="CENTER" spacing="10" style="-fx-padding: 5;">
                         <Label text="Interval:"/>
-                        <Slider min="100" max="10000" majorTickUnit="100" value="300" showTickLabels="true">
-                        </Slider>
-                        <TextField fx:id="intervalField" text="300" prefWidth="30" editable="false"/>
+                        <NumberField fx:id="intervalField" text="300" min="100" max="10000" prefWidth="80"/>
                         <Label text="ms"/>
                         <CheckBox fx:id="isLoopBox" selected="true"/>
                         <Label text="Loop"/>
                     </HBox>
                     <HBox alignment="CENTER" spacing="20" style="-fx-padding: 5;">
                         <Button fx:id="generateButton" text="Generate" onAction="#generateButtonClicked"/>
-                        <Button fx:id="saveAllButton" text="SaveAll" onAction="#saveButtonClicked"/>
+                        <Button fx:id="saveAllButton" text="SaveAll" onAction="#saveAllButtonClicked"/>
                         <Button fx:id="saveButton" text="Save" onAction="#saveButtonClicked"/>
-                        <Button fx:id="copyButton" text="Copy" onAction="#saveButtonClicked"/>
+                        <Button fx:id="copyButton" text="Copy" onAction="#onCopyButtonClicked"/>
                     </HBox>
                 </VBox>
             </bottom>
