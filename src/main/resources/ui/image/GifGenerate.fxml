@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.github.supermoonie.controller.gif.GifGenerateController"
+            fx:controller="com.github.supermoonie.controller.image.GifGenerateController"
             prefHeight="820.0" minWidth="800.0">
     <fx:define>
         <Image fx:id="addButtonImage" url="/image/plus.png"/>

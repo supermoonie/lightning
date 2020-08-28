@@ -12,7 +12,6 @@ import com.google.zxing.Result;
 import com.sun.javafx.PlatformUtil;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
@@ -20,16 +19,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.robot.Robot;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.apache.commons.io.FileUtils;
+import org.bytedeco.javacv.*;
+import org.bytedeco.javacv.Frame;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -41,6 +40,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Hello world!
@@ -79,7 +79,7 @@ public class App extends Application {
         }
         App.primaryStage = primaryStage;
         primaryStage.initStyle(StageStyle.UNDECORATED);
-//        primaryStage.setFullScreenExitHint("");
+        primaryStage.setFullScreenExitHint("");
         STAGE_MAP.put(StageKey.PRIMARY, primaryStage);
         App.scene = new Scene(new VBox());
         App.scene.setCursor(Cursor.CROSSHAIR);
@@ -122,10 +122,10 @@ public class App extends Application {
             return s;
         });
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/ui/gif/GifGenerate.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/ui/image/GifGenerate.fxml"));
             Parent parent = fxmlLoader.load();
             Scene scene = new Scene(parent);
-            scene.getStylesheets().add("/style/gif/GifGenerate.css");
+            scene.getStylesheets().add("/style/image/GifGenerate.css");
             stage.setScene(scene);
             fxmlLoader.getController();
         } catch (IOException e) {
@@ -135,6 +135,7 @@ public class App extends Application {
         }
         stage.show();
         stage.toFront();
+        stage.requestFocus();
     }
 
     private void showQrTableView() {
@@ -225,7 +226,7 @@ public class App extends Application {
         popupMenu.addSeparator();
         popupMenu.add(initRestMenu());
         popupMenu.addSeparator();
-        popupMenu.add(initGifMenu());
+        popupMenu.add(initImageMenu());
         popupMenu.addSeparator();
         popupMenu.add(quitItem);
 
@@ -234,28 +235,73 @@ public class App extends Application {
         tray.add(trayIcon);
     }
 
-    private Menu initGifMenu() {
-        Menu gifMenu = new Menu("Gif ->");
-        MenuItem generate = new MenuItem("Generate ...");
-        generate.addActionListener(event -> Platform.runLater(this::showGifGenerateView));
-        gifMenu.add(generate);
-        return gifMenu;
+    private Menu initImageMenu() {
+        Menu imageMenu = new Menu("Image ->");
+        MenuItem generateGifFromImg = new MenuItem("Gif From Img ...");
+        generateGifFromImg.addActionListener(event -> Platform.runLater(this::showGifGenerateView));
+        MenuItem oneTap = new MenuItem("One Tap ...");
+        oneTap.addActionListener(event -> Platform.runLater(() -> {
+
+        }));
+        imageMenu.add(generateGifFromImg);
+        imageMenu.addSeparator();
+        imageMenu.add(oneTap);
+        return imageMenu;
     }
 
     private Menu initQrMenu() {
         Menu qrMenu = new Menu("QR ->");
         MenuItem captureItem = new MenuItem("Capture");
         captureItem.addActionListener(event -> Platform.runLater(() -> {
-            Robot robot = new Robot();
-            WritableImage image = robot.getScreenCapture(null, Screen.getPrimary().getBounds());
+//            Robot robot = new Robot();
+//            WritableImage image = robot.getScreenCapture(null, Screen.getPrimary().getBounds(), true);
             Rectangle2D bounds = Screen.getPrimary().getBounds();
+            FFmpegFrameGrabber grabber = new FFmpegFrameGrabber("1:none");
+            grabber.setFormat("avfoundation");
+            grabber.setImageWidth(Double.valueOf(bounds.getWidth()).intValue());
+            grabber.setImageHeight(Double.valueOf(bounds.getHeight()).intValue());
+            Image image;
+            try {
+                grabber.start();
+                Frame frame = grabber.grab();
+                JavaFXFrameConverter converter = new JavaFXFrameConverter();
+                image = converter.convert(frame);
+                grabber.stop();
+            } catch (FrameGrabber.Exception e) {
+                e.printStackTrace();
+                return;
+            }
+
             primaryStage.setWidth(bounds.getWidth());
             primaryStage.setHeight(bounds.getHeight());
-            scene.setRoot(new HBox(new ImageView(image)));
-            scene.setOnMousePressed(mouseEvent -> System.out.println("mouse pressed"));
-            scene.setOnMouseDragged(mouseEvent -> System.out.println("x: " + mouseEvent.getX() + ", y: " + mouseEvent.getY()));
-            scene.setOnMouseReleased(mouseEvent -> System.out.println("mouse released"));
-            primaryStage.setFullScreen(true);
+            ImageView imageView = new ImageView(image);
+            final AnchorPane hBox = new AnchorPane(imageView);
+            scene.setRoot(hBox);
+            AtomicReference<Double> start = new AtomicReference<>((double) 0);
+            AtomicReference<Double> end = new AtomicReference<>((double) 0);
+            scene.setOnMousePressed(mouseEvent -> {
+                start.set(mouseEvent.getX());
+                end.set(mouseEvent.getY());
+                System.out.println("start: " + start.get() + ", end: " + end.get());
+            });
+            scene.setOnMouseDragged(mouseEvent -> {
+                final Rectangle rect = new Rectangle();
+                rect.setFill(null);
+                rect.setStroke(Color.web("firebrick", 0.4));
+                rect.setX(start.get());
+                rect.setY(end.get());
+                rect.setWidth(mouseEvent.getX() - start.get());
+                rect.setHeight(mouseEvent.getY() - end.get());
+                hBox.getChildren().clear();
+                hBox.getChildren().add(imageView);
+                hBox.getChildren().add(rect);
+                rect.toFront();
+            });
+            scene.setOnMouseReleased(mouseEvent -> {
+                System.out.println("start: " + start.get() + ", end: " + end.get());
+
+            });
+//            primaryStage.setFullScreen(true);
             primaryStage.show();
             primaryStage.setAlwaysOnTop(true);
             primaryStage.toFront();

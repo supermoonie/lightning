@@ -20,7 +20,7 @@ public class AppLauncher {
             Class<?>[] params = new Class[1];
             params[0] = Image.class;
             Method setDockIconImage = util.getMethod("setDockIconImage", params);
-            URL url = App.class.getClassLoader().getResource("lightning.bak.png");
+            URL url = App.class.getClassLoader().getResource("lightning-mac.png");
             Image image = Toolkit.getDefaultToolkit().getImage(url);
             setDockIconImage.invoke(application, image);
         } catch (Exception ignore) {

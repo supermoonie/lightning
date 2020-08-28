@@ -1,4 +1,4 @@
-package com.github.supermoonie.controller.gif;
+package com.github.supermoonie.controller.image;
 
 import com.github.supermoonie.App;
 import com.github.supermoonie.component.ImageViewWrapper;
@@ -6,7 +6,7 @@ import com.github.supermoonie.constant.StageKey;
 import com.github.supermoonie.io.GifSequenceWriter;
 import com.github.supermoonie.util.AlertUtil;
 import com.github.supermoonie.util.ClipboardUtil;
-import com.github.supermoonie.view.gif.GifGenerateView;
+import com.github.supermoonie.view.image.GifGenerateView;
 import com.sun.javafx.PlatformUtil;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
