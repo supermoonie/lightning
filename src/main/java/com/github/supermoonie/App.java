@@ -2,6 +2,7 @@ package com.github.supermoonie;
 
 import com.github.supermoonie.constant.StageKey;
 import com.github.supermoonie.controller.qr.ResultController;
+import com.github.supermoonie.imageproc.AppendFilter;
 import com.github.supermoonie.model.NotifySetting;
 import com.github.supermoonie.model.QrResult;
 import com.github.supermoonie.service.QrService;
@@ -13,22 +14,17 @@ import com.sun.javafx.PlatformUtil;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.apache.commons.io.FileUtils;
-import org.bytedeco.javacv.*;
-import org.bytedeco.javacv.Frame;
+import oshi.SystemInfo;
+import oshi.hardware.HardwareAbstractionLayer;
+import oshi.hardware.Sensors;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -37,10 +33,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Hello world!
@@ -64,8 +60,11 @@ public class App extends Application {
 
     private Parent qrResultParent;
 
+    private final SystemInfo systemInfo = new SystemInfo();
+
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         Platform.setImplicitExit(false);
         boolean addedAppToTray = addAppToTray();
         if (!addedAppToTray) {
@@ -222,6 +221,30 @@ public class App extends Application {
             Platform.runLater(Platform::exit);
         });
 
+        NOTIFY_EXECUTOR.scheduleAtFixedRate(() -> {
+//            Font font = new Font("Times New Roman", Font.PLAIN, 60);
+            Font font = new Font("", Font.PLAIN, 60);
+//            System.out.println("ow: " + icon.getWidth() + ", oh: " + icon.getHeight());
+            BufferedImage bi = new BufferedImage(icon.getWidth() * 6, icon.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2 = (Graphics2D) bi.getGraphics();
+
+            g2.setComposite(AlphaComposite.Clear);
+            g2.fillRect(0, 0, icon.getWidth() * 6, icon.getHeight());
+
+            g2.setColor(Color.darkGray);
+            g2.setComposite(AlphaComposite.Src);
+            HardwareAbstractionLayer hardware = systemInfo.getHardware();
+            Sensors sensors = hardware.getSensors();
+            double cpuTemperature = sensors.getCpuTemperature();
+            int[] fanSpeeds = sensors.getFanSpeeds();
+//            drawCenteredString(g2, s, new Rectangle(icon.getWidth() * 6, icon.getHeight()), font);
+            drawTwoLine(g2, String.valueOf((int) cpuTemperature), Arrays.toString(fanSpeeds), new Rectangle(icon.getWidth() * 6, icon.getHeight()), font);
+            AppendFilter appendFilter = new AppendFilter(icon);
+            BufferedImage bufferedImage = appendFilter.appendRight(bi);
+//            System.out.println("w: " + bufferedImage.getWidth() + ", h: " + bufferedImage.getHeight());
+            trayIcon.setImage(bufferedImage);
+            g2.dispose();
+        }, 1000, 1000, TimeUnit.MILLISECONDS);
         popupMenu.add(initQrMenu());
         popupMenu.addSeparator();
         popupMenu.add(initRestMenu());
@@ -230,9 +253,45 @@ public class App extends Application {
         popupMenu.addSeparator();
         popupMenu.add(quitItem);
 
+
         trayIcon.setPopupMenu(popupMenu);
 
         tray.add(trayIcon);
+    }
+
+    public void drawTwoLine(Graphics g, String line1, String lin2, Rectangle rect, Font font) {
+        // Get the FontMetrics
+        FontMetrics metrics = g.getFontMetrics(font);
+        // Determine the X coordinate for the text
+        int x = rect.x + (rect.width - metrics.stringWidth(line1)) / 2;
+        // Determine the Y coordinate for the text (note we add the ascent, as in java 2d 0 is top of the screen)
+        int y = rect.y + ((rect.height - metrics.getHeight()) / 2) + metrics.getAscent() + 5;
+        int yy = (rect.height / 2 - y) / 2;
+        // Set the font
+        g.setFont(font);
+        // Draw the String
+        g.drawString(line1 + " ℃", 10, 60);
+        g.drawString(lin2 + " rpm", 10, 120);
+    }
+
+    /**
+     * Draw a String centered in the middle of a Rectangle.
+     *
+     * @param g    The Graphics instance.
+     * @param text The String to draw.
+     * @param rect The Rectangle to center the text in.
+     */
+    public void drawCenteredString(Graphics g, String text, Rectangle rect, Font font) {
+        // Get the FontMetrics
+        FontMetrics metrics = g.getFontMetrics(font);
+        // Determine the X coordinate for the text
+        int x = rect.x + (rect.width - metrics.stringWidth(text)) / 2;
+        // Determine the Y coordinate for the text (note we add the ascent, as in java 2d 0 is top of the screen)
+        int y = rect.y + ((rect.height - metrics.getHeight()) / 2) + metrics.getAscent() + 5;
+        // Set the font
+        g.setFont(font);
+        // Draw the String
+        g.drawString(text, x, y);
     }
 
     private Menu initImageMenu() {
@@ -245,74 +304,74 @@ public class App extends Application {
         }));
         imageMenu.add(generateGifFromImg);
         imageMenu.addSeparator();
-        imageMenu.add(oneTap);
+//        imageMenu.add(oneTap);
         return imageMenu;
     }
 
     private Menu initQrMenu() {
         Menu qrMenu = new Menu("QR ->");
-        MenuItem captureItem = new MenuItem("Capture");
-        captureItem.addActionListener(event -> Platform.runLater(() -> {
+//        MenuItem captureItem = new MenuItem("Capture");
+//        captureItem.addActionListener(event -> Platform.runLater(() -> {
 //            Robot robot = new Robot();
 //            WritableImage image = robot.getScreenCapture(null, Screen.getPrimary().getBounds(), true);
-            Rectangle2D bounds = Screen.getPrimary().getBounds();
-            FFmpegFrameGrabber grabber = new FFmpegFrameGrabber("1:none");
-            grabber.setFormat("avfoundation");
-            grabber.setImageWidth(Double.valueOf(bounds.getWidth()).intValue());
-            grabber.setImageHeight(Double.valueOf(bounds.getHeight()).intValue());
-            Image image;
-            try {
-                grabber.start();
-                Frame frame = grabber.grab();
-                JavaFXFrameConverter converter = new JavaFXFrameConverter();
-                image = converter.convert(frame);
-                grabber.stop();
-            } catch (FrameGrabber.Exception e) {
-                e.printStackTrace();
-                return;
-            }
-
-            primaryStage.setWidth(bounds.getWidth());
-            primaryStage.setHeight(bounds.getHeight());
-            ImageView imageView = new ImageView(image);
-            final AnchorPane hBox = new AnchorPane(imageView);
-            scene.setRoot(hBox);
-            AtomicReference<Double> start = new AtomicReference<>((double) 0);
-            AtomicReference<Double> end = new AtomicReference<>((double) 0);
-            scene.setOnMousePressed(mouseEvent -> {
-                start.set(mouseEvent.getX());
-                end.set(mouseEvent.getY());
-                System.out.println("start: " + start.get() + ", end: " + end.get());
-            });
-            scene.setOnMouseDragged(mouseEvent -> {
-                final Rectangle rect = new Rectangle();
-                rect.setFill(null);
-                rect.setStroke(Color.web("firebrick", 0.4));
-                rect.setX(start.get());
-                rect.setY(end.get());
-                rect.setWidth(mouseEvent.getX() - start.get());
-                rect.setHeight(mouseEvent.getY() - end.get());
-                hBox.getChildren().clear();
-                hBox.getChildren().add(imageView);
-                hBox.getChildren().add(rect);
-                rect.toFront();
-            });
-            scene.setOnMouseReleased(mouseEvent -> {
-                System.out.println("start: " + start.get() + ", end: " + end.get());
-
-            });
-//            primaryStage.setFullScreen(true);
-            primaryStage.show();
-            primaryStage.setAlwaysOnTop(true);
-            primaryStage.toFront();
-        }));
+//            Rectangle2D bounds = Screen.getPrimary().getBounds();
+//            FFmpegFrameGrabber grabber = new FFmpegFrameGrabber("1:none");
+//            grabber.setFormat("avfoundation");
+//            grabber.setImageWidth(Double.valueOf(bounds.getWidth()).intValue());
+//            grabber.setImageHeight(Double.valueOf(bounds.getHeight()).intValue());
+//            Image image;
+//            try {
+//                grabber.start();
+//                Frame frame = grabber.grab();
+//                JavaFXFrameConverter converter = new JavaFXFrameConverter();
+//                image = converter.convert(frame);
+//                grabber.stop();
+//            } catch (FrameGrabber.Exception e) {
+//                e.printStackTrace();
+//                return;
+//            }
+//
+//            primaryStage.setWidth(bounds.getWidth());
+//            primaryStage.setHeight(bounds.getHeight());
+//            ImageView imageView = new ImageView(image);
+//            final AnchorPane hBox = new AnchorPane(imageView);
+//            scene.setRoot(hBox);
+//            AtomicReference<Double> start = new AtomicReference<>((double) 0);
+//            AtomicReference<Double> end = new AtomicReference<>((double) 0);
+//            scene.setOnMousePressed(mouseEvent -> {
+//                start.set(mouseEvent.getX());
+//                end.set(mouseEvent.getY());
+//                System.out.println("start: " + start.get() + ", end: " + end.get());
+//            });
+//            scene.setOnMouseDragged(mouseEvent -> {
+//                final Rectangle rect = new Rectangle();
+//                rect.setFill(null);
+//                rect.setStroke(Color.web("firebrick", 0.4));
+//                rect.setX(start.get());
+//                rect.setY(end.get());
+//                rect.setWidth(mouseEvent.getX() - start.get());
+//                rect.setHeight(mouseEvent.getY() - end.get());
+//                hBox.getChildren().clear();
+//                hBox.getChildren().add(imageView);
+//                hBox.getChildren().add(rect);
+//                rect.toFront();
+//            });
+//            scene.setOnMouseReleased(mouseEvent -> {
+//                System.out.println("start: " + start.get() + ", end: " + end.get());
+//
+//            });
+////            primaryStage.setFullScreen(true);
+//            primaryStage.show();
+//            primaryStage.setAlwaysOnTop(true);
+//            primaryStage.toFront();
+//        }));
         MenuItem scanQrItem = new MenuItem("Scan");
         scanQrItem.addActionListener(event -> Platform.runLater(this::scanQr));
         MenuItem generateQrItem = new MenuItem("Generate ...");
         generateQrItem.addActionListener(event -> Platform.runLater(this::showQrGeneratePane));
         MenuItem qrResultItem = new MenuItem("Result ...");
         qrResultItem.addActionListener(event -> Platform.runLater(this::showQrTableView));
-        qrMenu.add(captureItem);
+//        qrMenu.add(captureItem);
         qrMenu.add(scanQrItem);
         qrMenu.add(generateQrItem);
         qrMenu.add(qrResultItem);
